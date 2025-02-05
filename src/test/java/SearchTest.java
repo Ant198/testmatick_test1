@@ -21,40 +21,27 @@ public class SearchTest {
     WebElement element;
     WebElement button;
 
-
-    void openPage() {
+    @BeforeTest
+    public void lounchBroweser() {
         driver = new ChromeDriver();
-        driver.get(baseUrl);
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
-        currentUrl = driver.getCurrentUrl();
+        driver.get("https://www.google.com.ua/");
     }
 
-    void inputText() {
+    @Test
+    public void isRightLink() {
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
+        currentUrl = driver.getCurrentUrl();
         element = driver.findElement(By.xpath("//textArea[@class='gLFyf']"));
         element.sendKeys(inputText );
         currentInputText = element.getDomProperty("value");
-    }
-
-    void clickButton() {
         baseTitle = driver.getTitle();
         button = driver.findElement(By.xpath("//input"));
         button.click();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
         currentTitle = driver.getTitle();
-    }
 
-    @BeforeTest
-    public void lounchBroweser() {
-        openPage();
         Assert.assertEquals(baseUrl, currentUrl, "wrong url");
-    }
-
-    @Test
-    public void isRightLink() {
-
-        inputText();
         Assert.assertEquals(inputText.toString(), currentInputText, "wrong text");
-        clickButton();
         Assert.assertFalse(baseTitle.equals(currentTitle), "page did not load");
     }
 }
