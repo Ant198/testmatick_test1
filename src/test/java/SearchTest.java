@@ -1,4 +1,5 @@
 import org.testng.Assert;
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -29,6 +30,11 @@ public class SearchTest {
         driver.get("https://www.google.com.ua/");
     }
 
+    @AfterTest
+    public void closeBroweser() {
+        driver.close();
+    }
+
     @Test
     public void isRightLink() {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
@@ -39,7 +45,7 @@ public class SearchTest {
         baseTitle = driver.getTitle();
         button = driver.findElement(By.xpath("//input"));
         button.click();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         currentTitle = driver.getTitle();
         headers = driver.findElements(By.xpath("//h3[@class='LC20lb MBeuO DKV0Md']"));
 
@@ -50,6 +56,5 @@ public class SearchTest {
         Assert.assertEquals(inputText.toString(), currentInputText, "wrong text");
         Assert.assertFalse(baseTitle.equals(currentTitle), "page did not load");
 
-        driver.close();
     }
 }
