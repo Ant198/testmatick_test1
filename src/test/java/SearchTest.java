@@ -9,6 +9,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.time.Duration;
+import java.util.List;
 
 public class SearchTest {
     String baseUrl = "https://www.google.com.ua/";
@@ -20,6 +21,7 @@ public class SearchTest {
     WebDriver driver;
     WebElement element;
     WebElement button;
+    List<WebElement> headers;
 
     @BeforeTest
     public void lounchBroweser() {
@@ -37,11 +39,17 @@ public class SearchTest {
         baseTitle = driver.getTitle();
         button = driver.findElement(By.xpath("//input"));
         button.click();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
         currentTitle = driver.getTitle();
+        headers = driver.findElements(By.xpath("//h3[@class='LC20lb MBeuO DKV0Md']"));
 
+        for (WebElement header : headers) {
+            Assert.assertTrue(header.getText().contains("Java"), "error");
+        }
         Assert.assertEquals(baseUrl, currentUrl, "wrong url");
         Assert.assertEquals(inputText.toString(), currentInputText, "wrong text");
         Assert.assertFalse(baseTitle.equals(currentTitle), "page did not load");
+
+        driver.close();
     }
 }
