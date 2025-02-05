@@ -1,4 +1,6 @@
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import org.openqa.selenium.By;
@@ -41,10 +43,15 @@ public class SearchTest {
         currentTitle = driver.getTitle();
     }
 
-    @Test
-    public void isRightLink() {
+    @BeforeTest
+    public void lounchBroweser() {
         openPage();
         Assert.assertEquals(baseUrl, currentUrl, "wrong url");
+    }
+
+    @Test
+    public void isRightLink() {
+
         inputText();
         Assert.assertEquals(inputText.toString(), currentInputText, "wrong text");
         clickButton();
