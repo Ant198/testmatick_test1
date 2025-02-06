@@ -1,6 +1,5 @@
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -12,17 +11,62 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import java.time.Duration;
 import java.util.List;
 
+abstract  class BasePage {
+    WebDriver driver;
+    BasePage(WebDriver driver) {
+        this.driver = driver;
+    }
+
+    public String getPageTitle() {
+        return driver.getTitle();
+    };
+}
+
+class SearchPage extends BasePage {
+    By searchField = By.xpath("//textArea[@class='gLFyf']");
+    By searchButton = By.xpath("//input");
+
+    SearchPage(WebDriver driver) {
+        super(driver);
+    }
+
+    public String getCurrentUrl() {
+        return driver.getCurrentUrl();
+    }
+
+    public void typeText() {
+        driver.findElement(searchField).sendKeys("Java");
+    }
+
+    public String getTypedText() {
+        return driver.findElement(searchField).getDomProperty("value");
+    }
+
+    public void clickButton() {
+        driver.findElement(searchButton).click();
+    }
+}
+
+class ResultPage extends BasePage {
+    By headers = By.xpath("//h3[@class='LC20lb MBeuO DKV0Md']");
+
+    ResultPage(WebDriver driver) {
+        super(driver);
+    }
+
+    List<WebElement> getListOfText() {
+        return driver.findElements(headers);
+    }
+
+}
+
 public class SearchTest {
+    WebDriver driver;
     String baseUrl = "https://www.google.com.ua/";
     String currentUrl;
-    CharSequence inputText = "java";
-    String currentInputText;
+    String expectedText = "Java";
     String baseTitle;
     String currentTitle;
-    WebDriver driver;
-    WebElement element;
-    WebElement button;
-    List<WebElement> headers;
 
     @BeforeTest
     public void lounchBroweser() {
@@ -38,23 +82,21 @@ public class SearchTest {
     @Test
     public void isRightLink() {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
-        currentUrl = driver.getCurrentUrl();
-        element = driver.findElement(By.xpath("//textArea[@class='gLFyf']"));
-        element.sendKeys(inputText );
-        currentInputText = element.getDomProperty("value");
-        baseTitle = driver.getTitle();
-        button = driver.findElement(By.xpath("//input"));
-        button.click();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        currentTitle = driver.getTitle();
-        headers = driver.findElements(By.xpath("//h3[@class='LC20lb MBeuO DKV0Md']"));
+        SearchPage searchPage = new SearchPage(driver);
+        currentUrl = searchPage.getCurrentUrl();
+        baseTitle = searchPage.getPageTitle();
+        searchPage.typeText();
+        searchPage.clickButton();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(25));
+        ResultPage resultPage = new ResultPage(driver);
+        currentTitle = resultPage.getPageTitle();
 
-        for (WebElement header : headers) {
+        for (WebElement header : resultPage.getListOfText()) {
             Assert.assertTrue(header.getText().contains("Java"), "error");
         }
         Assert.assertEquals(baseUrl, currentUrl, "wrong url");
-        Assert.assertEquals(inputText.toString(), currentInputText, "wrong text");
-        Assert.assertFalse(baseTitle.equals(currentTitle), "page did not load");
+        Assert.assertEquals(expectedText.toString(), searchPage.getTypedText(), "wrong text");
+        Assert.assertFalse(baseTitle.equals(resultPage.getPageTitle()), "page did not load");
 
     }
 }
