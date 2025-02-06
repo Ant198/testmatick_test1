@@ -1,66 +1,18 @@
+package test_pages;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
-
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
+import pages.ResultPage;
+import pages.SearchPage;
 
 import java.time.Duration;
-import java.util.List;
 
-abstract  class BasePage {
-    WebDriver driver;
-    BasePage(WebDriver driver) {
-        this.driver = driver;
-    }
-
-    public String getPageTitle() {
-        return driver.getTitle();
-    };
-}
-
-class SearchPage extends BasePage {
-    By searchField = By.xpath("//textArea[@class='gLFyf']");
-    By searchButton = By.xpath("//input");
-
-    SearchPage(WebDriver driver) {
-        super(driver);
-    }
-
-    public String getCurrentUrl() {
-        return driver.getCurrentUrl();
-    }
-
-    public void typeText() {
-        driver.findElement(searchField).sendKeys("Java");
-    }
-
-    public String getTypedText() {
-        return driver.findElement(searchField).getDomProperty("value");
-    }
-
-    public void clickButton() {
-        driver.findElement(searchButton).click();
-    }
-}
-
-class ResultPage extends BasePage {
-    By headers = By.xpath("//h3[@class='LC20lb MBeuO DKV0Md']");
-
-    ResultPage(WebDriver driver) {
-        super(driver);
-    }
-
-    List<WebElement> getListOfText() {
-        return driver.findElements(headers);
-    }
-
-}
-
-public class SearchTest {
+public class TestPage {
     WebDriver driver;
     String baseUrl = "https://www.google.com.ua/";
     String currentUrl;
