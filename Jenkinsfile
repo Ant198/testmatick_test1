@@ -3,12 +3,17 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git "mvnhttps://github.com/Ant198/testmatick_test1.git'
+                git "https://github.com/Ant198/testmatick_test1.git'
             }
         }
         stage('Run Selenium Tests') {
             steps {
-                sh 'mvn test'  /
+                sh 'mvn clean test'  /
+            }
+        }
+        stage ('Publish Test Results') {
+            steps {
+                            TestNG 'target/surefire-reports/*.xml'
             }
         }
     }
