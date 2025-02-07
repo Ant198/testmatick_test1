@@ -11,10 +11,5 @@ pipeline {
                 sh 'mvn clean test'  /
             }
         }
-        stage ('Publish Test Results') {
-            steps {
-                            TestNG 'target/surefire-reports/*.xml'
-            }
-        }
     }
 }
