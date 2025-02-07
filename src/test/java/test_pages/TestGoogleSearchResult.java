@@ -28,7 +28,7 @@ public class TestGoogleSearchResult extends BaseTest {
         currentTitle = resultPage.getPageTitle();
 
         for (WebElement header : resultPage.getListOfText()) {
-            Assert.assertTrue(header.getText().contains("java"), "error");
+            Assert.assertTrue(header.getText().contains("Java"), "error");
         }
         Assert.assertEquals(baseUrl, currentUrl, "wrong url");
         Assert.assertEquals(expectedText, searchPage.getTypedText(), "wrong text");

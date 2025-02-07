@@ -1,13 +1,14 @@
 pipeline {
     agent any
-    options {
-        // Timeout counter starts AFTER agent is allocated
-        timeout(time: 1, unit: 'SECONDS')
-    }
     stages {
-        stage('Example') {
+        stage('Checkout') {
             steps {
-                echo 'Hello World'
+                git "mvnhttps://github.com/Ant198/testmatick_test1.git'
+            }
+        }
+        stage('Run Selenium Tests') {
+            steps {
+                sh 'mvn test'  /
             }
         }
     }
