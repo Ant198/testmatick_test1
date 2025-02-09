@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git "https://github.com/Ant198/testmatick_test1.git'
+                git 'https://github.com/Ant198/testmatick_test1.git'
             }
         }
         stage('Run Selenium Tests') {
