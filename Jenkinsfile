@@ -1,15 +1,10 @@
 pipeline {
     agent any
     stages {
-        stage('Checkout') {
+       stage('Run the test') {
             steps {
-                git 'https://github.com/Ant198/testmatick_test1.git'
+                sh 'mvn clean test'
             }
-        }
-        stage('Run Selenium Tests') {
-            steps {
-                sh 'mvn clean test'  /
-            }
-        }
+       }
     }
 }
